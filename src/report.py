@@ -380,11 +380,11 @@ against an average of {_money(snap.mean_recent)} and a range of
 {driver_lines}
 
 <!--
-WRITE THIS SECTION YOURSELF. Two or three sentences on why the differential is
-where it is. The generated numbers above are inputs, not analysis, and an
-interviewer will spot the difference immediately.
+Commentary goes here. Two or three sentences on why the differential is where
+it is. Everything above is generated: those are inputs, not analysis, and the
+pipeline deliberately does not attempt this part.
 
-Worth checking before you write:
+Worth checking before writing:
   - Mainline apportionment for the current and coming month
   - Cushing and Alberta inventory builds or draws
   - PADD 2 refinery turnarounds
@@ -395,8 +395,8 @@ Worth checking before you write:
 ## What to watch
 
 <!--
-Two or three forward looking points. Be specific and falsifiable: name the
-number you are watching and what would change your view.
+Two or three forward looking points. Specific and falsifiable: name the number
+being watched and what would change the view.
 -->
 
 ---

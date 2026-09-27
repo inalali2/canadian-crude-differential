@@ -12,6 +12,9 @@ about refusing to pretend those are the same thing.
 
 ![Discount history](output/discount_history.png)
 
+252 monthly observations, September 2005 to August 2026. WTI from the US EIA,
+WCS Hardisty from the Government of Alberta.
+
 ## What the differential is
 
 Western Canadian Select is a heavy sour blend priced at Hardisty, Alberta. WTI
@@ -41,7 +44,7 @@ against pre-2024 history needs that caveat attached.
 ## Quick start
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/inalali2/canadian-crude-differential.git
 cd canadian-crude-differential
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
@@ -207,25 +210,50 @@ including the trailing space in its type column.
 
 ## Findings
 
-<!--
-WRITE THIS BEFORE YOU SHARE THE REPO.
+**The full-period average is not worth quoting.** Across 252 months the
+discount averaged $16.98, but that number spans the 2008 crash, the 2018
+Alberta curtailment, the 2020 demand collapse and the 2024 opening of Trans
+Mountain Expansion. It is an average of four different markets. This is why the
+report splits the history rather than reporting one mean.
 
-Three or four paragraphs with real numbers from a real run. Suggested shape:
+**TMX moved the level, and compressed the range far more.** Before TMX entered
+service in May 2024 the discount averaged $17.43 across 224 months, with a range
+of $4.34 to $45.93. In the 28 months since, it has averaged $13.42 with a range
+of $9.95 to $18.99.
 
-1. Where the differential has ranged over your window and what the distribution
-   looks like. Mean, range, and whether it is bimodal. The 2018 Alberta
-   curtailment episode is in this data and is worth a sentence.
-2. What happened around TMX entering service in May 2024. The regime table in
-   the Summary sheet gives you both averages. Did the range shift, and by how
-   much?
-3. Which driver actually tracked the differential in your data, with the
-   correlation figure, and which one you expected to and did not.
-4. What you would watch next and what would change your view.
+The $4 shift in the mean is the headline, and it is roughly what you would
+expect from adding around 590,000 barrels per day of egress to tidewater. The
+more interesting number is the range. Pre-TMX the discount spanned $41.59
+between its extremes; post-TMX it has spanned $9.04. Egress scarcity is not
+just a level effect on the differential, it is most of its volatility. When
+Alberta has spare pipeline the discount sits near transport plus quality and
+stays there. When it does not, the marginal barrel has to clear by rail or not
+move at all, and the price gaps.
 
-Keep it short. Be specific. Own the limitations: the sample is short, the
-correlations are not causal, and the apportionment series is monthly against a
-daily price.
--->
+**The tails carry the information.** The $45.93 maximum is November 2018, when
+Alberta production overwhelmed egress, storage filled, and the province
+responded with mandated curtailment. The chart shows it as a single spike that
+dwarfs everything around it. A normal distribution is the wrong mental model
+here: the differential spends most of its time in a narrow band set by transport
+economics and occasionally dislocates when capacity binds.
+
+**The driver correlations came back weak, and that is the honest result.**
+Against monthly changes over a trailing three year window, Cushing inventories
+correlate at +0.11 and Brent at -0.04. Neither is a signal.
+
+That is not a surprise on reflection, and the null result is more informative
+than a strong one would have been. Cushing is a US midcontinent storage hub. The
+WCS discount is set by Alberta egress. The series that should track it is
+Enbridge Mainline apportionment, which is published as monthly PDF notices with
+no stable feed, and is therefore not in this dataset. The pipeline supports it
+as a manually maintained CSV for exactly that reason. Testing the variable you
+can get instead of the one that matters is the commonest way to produce a
+confident wrong answer, so this section reports what was actually measured.
+
+**Where it sits now.** The August 2026 reading is $15.69, or 18.7 percent of
+WTI. That is above the post-TMX average of $13.42, near the top of the post-TMX
+range, and in the 85th percentile of the trailing twelve months. It has widened
+$2.39 over one month and $4.52 over twelve.
 
 ## Limitations
 
@@ -237,6 +265,14 @@ daily price.
 - The sample spans several structural breaks (2008, 2018 curtailment, 2020
   demand collapse, 2024 TMX startup). Any full-period statistic mixes regimes,
   which is why the report splits them.
+- The post-TMX window is 28 months, 11 percent of the sample. It is long enough
+  to see a level shift and too short to call a stable range, and it overlaps
+  with a period of US tariff uncertainty on Canadian energy. TMX is not the only
+  thing that changed in it, so the $4 shift should not be attributed entirely to
+  pipeline capacity.
+- The driver correlations use 35 monthly observations. That is a thin sample
+  for any correlation claim, which is a further reason to read the weak results
+  as uninformative rather than as evidence of no relationship.
 - Correlation here is descriptive. Nothing in this repo establishes causation.
 
 ## Licence
