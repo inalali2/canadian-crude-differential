@@ -1,0 +1,15 @@
+.env
+data/*.db
+data/*.db-wal
+data/*.db-shm
+output/*.xlsx
+output/*.md
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.DS_Store
+.ipynb_checkpoints/
+output/*.png
+!output/discount_history.png

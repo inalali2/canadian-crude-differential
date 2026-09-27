@@ -1,0 +1,93 @@
+# Canadian crude differential pipeline configuration.
+#
+# Anything you change should not require touching the code.
+
+database: data/crude.db
+
+# WCS assessments begin in 2005. Earlier rows in the Alberta feed are null
+# placeholders from before the benchmark existed.
+start_date: "2005-01-01"
+
+eia:
+  base_url: https://api.eia.gov/v2
+  # API key is read from the EIA_API_KEY environment variable, never from this
+  # file. Free key: https://www.eia.gov/opendata/register.php
+  #
+  # Find valid ids for a route with:
+  #   python -m src.cli discover --route petroleum/pnp/wiup --contains "PADD 2"
+  series:
+    - id: RWTC
+      route: petroleum/pri/spt
+      frequency: daily
+      metric: wti_spot
+      units: USD/bbl
+      label: WTI Cushing spot
+
+    - id: RBRTE
+      route: petroleum/pri/spt
+      frequency: daily
+      metric: brent_spot
+      units: USD/bbl
+      label: Brent spot
+
+    - id: WCESTP11
+      route: petroleum/stoc/wstk
+      frequency: weekly
+      metric: cushing_stocks
+      units: thousand barrels
+      label: Cushing ending stocks ex-SPR
+
+    # PADD 2 refinery utilization. Run the discover command above to confirm
+    # the current series id, then uncomment.
+    # - id: W_NA_YUP_R20_PER
+    #   route: petroleum/pnp/wiup
+    #   frequency: weekly
+    #   metric: padd2_utilization
+    #   units: percent
+    #   label: PADD 2 refinery utilization
+
+# Western Canadian Select at Hardisty, from the Government of Alberta Economic
+# Data API. Linked from https://economicdashboard.alberta.ca/dashboard/wcs-oil-price/
+#
+# MONTHLY averages, not daily settlements. A daily WCS assessment is a
+# commercial product. See the alignment note under `transform` below.
+wcs:
+  metric: wcs_hardisty
+  units: USD/bbl
+  api_url: https://api.economicdata.alberta.ca/data?table=OilPrices&Type=WCS
+  api_type: WCS
+  manual_csv: data/manual/wcs_hardisty.csv
+
+# Enbridge Mainline apportionment, the cleanest read on egress tightness.
+# Enbridge publishes monthly notices as web pages and PDFs, and moves the page
+# periodically. There is no stable feed, so this is manual by default.
+#
+# To add it: find the current notices page, record the apportionment percentage
+# per month in data/manual/apportionment.csv with columns obs_date,value, and
+# it joins the analysis automatically.
+apportionment:
+  metric: mainline_apportionment
+  units: percent
+  manual_csv: data/manual/apportionment.csv
+  # index_url: <current Enbridge apportionment notices URL>
+
+transform:
+  # 'monthly' averages daily WTI to the month before taking the spread, so both
+  # legs cover the same window. This is correct for the free monthly WCS feed.
+  #
+  # Switch to 'daily' only if you have a genuine daily WCS assessment. Forward
+  # filling a monthly number across 21 trading days produces a sawtooth that is
+  # an artefact of the fill, not a market move.
+  wcs_frequency: monthly
+
+  # Only used when wcs_frequency is 'daily'.
+  max_wcs_staleness_days: 3
+
+report:
+  output_dir: output
+  lookback_days: 7700
+
+  # Structural breaks. A single average spanning one of these is meaningless,
+  # so the report splits the history at each.
+  regime_breaks:
+    TMX in service: "2024-05-01"
