@@ -12,8 +12,6 @@ about refusing to pretend those are the same thing.
 
 ![Discount history](output/discount_history.png)
 
-> The chart above is from the synthetic demo dataset.
-
 ## What the differential is
 
 Western Canadian Select is a heavy sour blend priced at Hardisty, Alberta. WTI
