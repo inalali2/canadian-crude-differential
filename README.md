@@ -12,8 +12,7 @@ about refusing to pretend those are the same thing.
 
 ![Discount history](output/discount_history.png)
 
-> The chart above is from the synthetic demo dataset. Regenerate it with real
-> data before reading anything into it.
+> The chart above is from the synthetic demo dataset.
 
 ## What the differential is
 
